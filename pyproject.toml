@@ -1,0 +1,25 @@
+[project]
+name = "lminfra101n"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "accelerate==1.4.0",
+    "bitsandbytes==0.45.3",
+    "datasets==3.3.2",
+    "evaluate==0.4.3",
+    "peft==0.14.0",
+    "protobuf>=6.32.1",
+    "sentencepiece>=0.2.1",
+    "torch>=2.8.0",
+    "transformers>=4.56.1",
+    "trl==0.21.0",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.30.1",
+    "ipython>=9.5.0",
+    "pytest>=8.4.2",
+]
