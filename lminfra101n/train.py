@@ -73,6 +73,7 @@ def dpo_finetuning(dataset, tokenizer, model):
         model,
         ref_model=None,
         args=args,
+        # bit of a hack, but huggingface calls tokenizer directly, while processor class contains tokenizer
         processing_class=tokenizer.tokenizer,
         train_dataset=dataset['train'],
         eval_dataset=dataset['val'],
