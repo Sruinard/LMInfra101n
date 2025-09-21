@@ -1,20 +1,21 @@
 import pytest
 
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from lminfra101n.train import prepare_dataset, dpo_finetuning
+from lminfra101n import train, configs, models
 
 @pytest.fixture()
-def tokenizer():
-    return AutoTokenizer.from_pretrained("philschmid/gemma-tokenizer-chatml", use_fast=True)
+def config() -> configs.Config:
+    return configs.load_config("dev")
 
 @pytest.fixture()
-def model():
-    # google/gemma-3-4b-pt
-    return AutoModelForCausalLM.from_pretrained("google/gemma-3-4b-pt", trust_remote_code=True, device_map="auto")
+def processor_and_model(config: configs.Config):
+    return models.load_model_and_processor(config.model_name, config.processor_name)
 
-def test_dataset_preparation_splits_and_formats(tokenizer):
-    path = "data/dataset.jsonl"
-    dataset = prepare_dataset(path, tokenizer)
+
+def test_dataset_preparation_splits_and_formats(config: configs.Config, processor_and_model: tuple[AutoTokenizer, AutoModelForCausalLM]):
+    tokenizer, _ = processor_and_model
+    path = config.dataset_path
+    dataset = train.prepare_dataset(path, tokenizer)
     assert "train" in dataset
     assert "test" in dataset
     assert "<|im_start|>user\n" in dataset["train"][0]["prompt"]

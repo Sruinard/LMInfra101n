@@ -1,0 +1,3 @@
+model_name: "google/gemma-3-4b-it"
+processor_name: "google/gemma-3-4b-it"
+dataset_path: "data/dataset.jsonl"
