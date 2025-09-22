@@ -165,3 +165,10 @@ def chat_loop(processor, model, args):
 def create_chat_session(processor, model, config: ChatConfig):
     """Factory function to create a chat session."""
     return ChatHandler(processor, model, config)
+
+if __name__ == "__main__":
+    from lminfra101n.models import load_model_and_processor
+
+    processor, model = load_model_and_processor("google/gemma-3-4b-it", "google/gemma-3-1b-it")
+    chat_session = create_chat_session(processor, model, ChatConfig())
+    chat_loop(processor, model, "hf")

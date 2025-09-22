@@ -37,6 +37,8 @@ def main():
 
     logging.info(f"Training model...")
     trainer.train()
+
+    trainer.save_model("./results/checkpoint-custom")
     logging.info("done.")
 
 

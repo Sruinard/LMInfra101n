@@ -20,6 +20,8 @@ def prepare_dataset(path, tokenizer: AutoTokenizer):
         ], tokenize=False).split("<start_of_turn>model\n")
 
         # gemma tokenizer adds <bos> to the beginning of the prompt
+        example["images"] = None
+        example["pixel_values"] = None
         example["prompt"] = prompt.replace("<bos>", "")
         # split removed <start_of_turn>model\n from the chosen and rejected
         example["chosen"] = f"<start_of_turn>model\n{chosen}"
@@ -74,11 +76,12 @@ def dpo_finetuning(dataset, tokenizer, model):
         ref_model=None,
         args=args,
         # bit of a hack, but huggingface calls tokenizer directly, while processor class contains tokenizer
-        processing_class=tokenizer.tokenizer,
+        processing_class=tokenizer,
         train_dataset=dataset['train'],
         eval_dataset=dataset['val'],
         peft_config=peft_config,
     )
+    trainer.is_vision_model = True
     return trainer
 
 

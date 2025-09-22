@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 import logging
 import os
 
-PROJECT_DIR = Path(__file__).resolve().parent.parent
+PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
 
 class Config(BaseModel):
     model_name: str = Field(..., description="Name/path of the model to load")

@@ -11,6 +11,15 @@ def config() -> configs.Config:
 def processor_and_model(config: configs.Config):
     return models.load_model_and_processor(config.model_name, config.processor_name)
 
+def test_gemma_3_1b_it_loading():
+    tokenizer = AutoTokenizer.from_pretrained("google/gemma-3-1b-it")
+    assert tokenizer is not None
+
+def test_consistent_token_assignment(processor_and_model: tuple[AutoTokenizer, AutoModelForCausalLM]):
+    tokenizer, _ = processor_and_model
+    features = {"prompt": "The sky is", "chosen": " blue", "rejected": " green"}
+    tokenizer(features["prompt"], add_special_tokens=False)
+
 
 def test_dataset_preparation_splits_and_formats(config: configs.Config, processor_and_model: tuple[AutoTokenizer, AutoModelForCausalLM]):
     tokenizer, _ = processor_and_model
