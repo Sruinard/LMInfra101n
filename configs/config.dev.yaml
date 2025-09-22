@@ -1,3 +1,15 @@
-model_name: "google/gemma-3-1b-it"
-processor_name: "google/gemma-3-1b-it"
-dataset_path: "data/dataset.jsonl"
+model:
+  model_name: "google/gemma-3-1b-it"
+  tokenizer_name: "google/gemma-3-1b-it"
+  artifact_dir: "artifacts/"
+  artifact_name: "sruinard/gemma-3-1b-it-dpo"
+
+training:
+  dataset_path: "data/dataset.jsonl"
+  peft:
+    lora_r: 16
+  dpo:
+    beta: 0.05
+
+serving:
+  base_url: "http://localhost:8000"

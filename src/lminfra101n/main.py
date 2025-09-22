@@ -7,8 +7,6 @@ import requests
 def parse_args():
     parser = argparse.ArgumentParser(description='Chat with Gemma model using HuggingFace or OpenAI-compatible API')
     parser.add_argument("--env", type=str, default="dev", help="Environment config to use (dev, prod, etc)")
-    parser.add_argument("--mode", type=str, default="hf", choices=['hf', 'openai'], 
-                       help="Mode to run in - 'hf' for HuggingFace or 'openai' for OpenAI-compatible API")
     return parser.parse_args()
 
 def main():
@@ -19,28 +17,16 @@ def main():
     logging.info(f"Starting chat with environment: {args.env}")
     
     cfg = configs.load_config(env=args.env)
-    logging.info(f"Loaded config: {cfg.model_name} and {cfg.processor_name}")
+    logging.info(f"Loaded configuration for environment: {args.env}")
     
     # Load model and processor
-    processor, model = models.load_model_and_processor(cfg.model_name, cfg.processor_name)
-    logging.info(f"Loaded model and processor")
+    model_repo = models.RepositoryModel(cfg.model)
+    training_service = train.DPOTrainingService(cfg, model_repo)
+    logging.info(f"Initialized training service")
 
-
-    logging.info(f"Preparing dataset...")
-    dataset = train.prepare_dataset(cfg.dataset_path, processor)
-    logging.info("done.")
-
-
-    logging.info(f"Training model...")
-    trainer = train.dpo_finetuning(dataset, processor, model)
-    logging.info("done.")
-
-    logging.info(f"Training model...")
-    trainer.train()
-
-    trainer.save_model("./results/checkpoint-custom")
-    logging.info("done.")
-
+    logging.info("Starting training...")
+    training_service.run()
+    logging.info("Training completed.")
 
 if __name__ == "__main__":
     main()
