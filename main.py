@@ -1,8 +1,6 @@
 import argparse
 import logging
 from lminfra101n import models, configs, loggers, train
-import torch
-import requests
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Chat with Gemma model using HuggingFace or OpenAI-compatible API')
